@@ -130,7 +130,7 @@ window.onload = function() {
         resultLabel.x = 180;
         resultLabel.y = 300;
 
-        var retryLabel = new Label("Press SPACE to Retry");
+        var retryLabel = new Label("Tap or press SPACE to Retry");
         retryLabel.font = "24px sans-serif";
         retryLabel.color = "black";
         retryLabel.x = 160;
@@ -143,6 +143,11 @@ window.onload = function() {
             if (core.input.space) {
                 tabako.scaleX = 0.2;
                 isFinished = false;
+                core.replaceScene(playScene);
+            }
+        });
+        scoreScene.addEventListener("touchstart", function() {
+            if (!isFinished) {
                 core.replaceScene(playScene);
             }
         });
@@ -160,7 +165,7 @@ window.onload = function() {
         gameoverLabel.x = 170;
         gameoverLabel.y = 280;
 
-        var retryLabel2 = new Label("Press SPACE to Retry");
+        var retryLabel2 = new Label("Tap or press SPACE to Retry");
         retryLabel2.font = "24px sans-serif";
         retryLabel2.color = "black";
         retryLabel2.x = 160;
@@ -173,6 +178,11 @@ window.onload = function() {
             if (core.input.space) {
                 tabako.scaleX = 0.2;
                 isFinished = false;
+                core.replaceScene(playScene);
+            }
+        });
+        gameoverScene.addEventListener("touchstart", function() {
+            if (!isFinished) { 
                 core.replaceScene(playScene);
             }
         });
