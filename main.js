@@ -19,15 +19,61 @@ window.onload = function() {
         //////////////////////////////////////////////////
 
         var titleScene = new Scene();
-        titleScene.backgroundColor = "#ffffff";
+        titleScene.backgroundColor = "#f8f8f8";
+            
+        // ===== メインタイトル =====
+        var mainTitle = new Label("きゅーてぃくる死亡説");
+        mainTitle.font = "36px sans-serif";
+        mainTitle.color = "#222";
+        mainTitle.x = 110;
+        mainTitle.y = 120;
+        mainTitle.width = 400;
+            
+        // ===== サブタイトル =====
+        var subTitle = new Label("副流煙 - ジリ貧タバコチキンレース -");
+        subTitle.font = "20px sans-serif";
+        subTitle.color = "#555";
+        subTitle.x = 110;
+        subTitle.y = 170;
+            
+        // ===== 説明文（改行つき） =====
+        var description = new Label(
+        "こんにちは。きゅーてぃくるの楽しいクソゲー説へようこそ。\n" +
+        "広島バンド きゅーてぃくる死亡説です。このクソゲーは、きゅーてぃくる死亡説の\n\n" +
+        "代表曲「副流煙」にちなんで、ヘヴィースモーカーのバンドマンに捧げる\n" +
+        "ジリ貧吸いタバコチキンレース系ゲームとして作成されました。\n" +
+        "遊び方はとても簡単。スマホから開いている人はタップするとスタート、\n" +
+        "スタートしたあとはいい感じのタイミングでタップしたらタバコを吸い終わります。\n" +
+        "持ち手の部分ぎりぎりまで吸うとハイスコアになります。ぜひハイスコアを目指してね。"
+        );
+        description.font = "16px sans-serif";
+        description.color = "#333";
+        description.x = 60;
+        description.y = 240;
+        description.width = 520;
+        
+        // ===== スタート表示（点滅） =====
+        var startLabel = new Label("TAP TO START");
+        startLabel.font = "28px sans-serif";
+        startLabel.color = "#000";
+        startLabel.x = 180;
+        startLabel.y = 480;
+        
+        startLabel.on("enterframe", function() {
+            this.opacity = 0.5 + Math.sin(core.frame * 0.1) * 0.5;
+        });
+        
+        titleScene.addChild(mainTitle);
+        titleScene.addChild(subTitle);
+        titleScene.addChild(description);
+        titleScene.addChild(startLabel);
+        
+        // タップで開始
+        titleScene.addEventListener("touchstart", function() {
+            core.replaceScene(playScene);
+        });
 
-        var titleLabel = new Label("Start : Push SPACE");
-        titleLabel.font = "32px sans-serif";
-        titleLabel.color = "black";
-        titleLabel.x = 120;
-        titleLabel.y = 300;
-
-        titleScene.addChild(titleLabel);
+        // titleScene.addChild(titleLabel);
 
         titleScene.on("enterframe", function() {
             if (core.input.space) {
@@ -103,20 +149,41 @@ window.onload = function() {
             }
         });
 
-        playScene.addEventListener("touchstart", function() {
-            if (!isFinished) {
-                var score = Math.floor((1 - tabako.scaleX) * 12000 - 11900);
-                resultLabel.text = "Score : " + score + "/100";   
+        function stopGame() {
+            if (isFinished) return;
+        
+            isFinished = true;
+        
+            var score = Math.floor((1 - tabako.scaleX) * 12000 - 11900);
+            resultLabel.text = "Score : " + score + "/100";
+        
+            // 持ち手フェードアウト開始
+            mochite.tl.fadeOut(30);   // 1秒（fps30想定）
+            tabako.tl.moveBy(3,0,3).moveBy(-6,0,6).moveBy(3,0,3);
+            playScene.tl.fadeOut(30);
+        
+            // 1.5秒後にスコア画面へ
+            playScene.tl.delay(45).then(function() {
                 core.replaceScene(scoreScene);
-            }
-        });
-        playScene.addEventListener("mousedown", function() {
-            if (!isFinished) {
-                var score = Math.floor((1 - tabako.scaleX) * 12000 - 11900);
-                resultLabel.text = "Score : " + score + "/100";   
-                core.replaceScene(scoreScene);
-            }
-        });
+            });
+        }
+
+        playScene.addEventListener("touchstart", stopGame);
+        playScene.addEventListener("mousedown", stopGame);
+        // playScene.addEventListener("touchstart", function() {
+        //     if (!isFinished) {
+        //         var score = Math.floor((1 - tabako.scaleX) * 12000 - 11900);
+        //         resultLabel.text = "Score : " + score + "/100";   
+        //         core.replaceScene(scoreScene);
+        //     }
+        // });
+        // playScene.addEventListener("mousedown", function() {
+        //     if (!isFinished) {
+        //         var score = Math.floor((1 - tabako.scaleX) * 12000 - 11900);
+        //         resultLabel.text = "Score : " + score + "/100";   
+        //         core.replaceScene(scoreScene);
+        //     }
+        // });
         //////////////////////////////////////////////////
         // スコアシーン
         //////////////////////////////////////////////////
