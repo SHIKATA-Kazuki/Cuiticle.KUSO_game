@@ -7,7 +7,7 @@ window.onload = function() {
     const IMG_TABAKO = "tabako.png";
     const IMG_MOCHITE = "mochite.png";
 
-    var core = new Core(DISP_SIZE, DISP_SIZE);
+    var core = new Core(DISP_SIZE, DISP_SIZE*1.7);
     core.fps = 30;
 
     core.preload(IMG_AITSU, IMG_TABAKO, IMG_MOCHITE);
