@@ -3,6 +3,8 @@ enchant();
 window.onload = function() {
 
     const DISP_SIZE = 640;
+    // const IMG_AITSU = "aitsu.jpg";
+    // const IMG_AITSU = "koitsu.jpg";
     const IMG_AITSU = "cat.JPG";
     const IMG_TABAKO = "tabako.png";
     const IMG_MOCHITE = "mochite.png";
@@ -10,7 +12,7 @@ window.onload = function() {
     var core = new Core(DISP_SIZE, DISP_SIZE*1.7);
     core.fps = 30;
 
-    core.preload(IMG_AITSU, IMG_TABAKO, IMG_MOCHITE);
+    core.preload(IMG_AITSU, IMG_TABAKO, IMG_MOCHITE,"bluegameover.jpg","pinkgameover.jpg");
     core.keybind(32, "space")
     core.onload = function() {
 
@@ -39,7 +41,7 @@ window.onload = function() {
         // ===== 説明文（改行つき） =====
         var description = new Label(
         "こんにちは。きゅーてぃくるの楽しいクソゲー説へようこそ。\n" +
-        "広島バンド きゅーてぃくる死亡説です。このクソゲーは、きゅーてぃくる死亡説の\n\n" +
+        "広島バンド きゅーてぃくる死亡説です。このクソゲーは、きゅーてぃくる死亡説の\n" +
         "代表曲「副流煙」にちなんで、ヘヴィースモーカーのバンドマンに捧げる\n" +
         "ジリ貧吸いタバコチキンレース系ゲームとして作成されました。\n" +
         "遊び方はとても簡単。スマホから開いている人はタップするとスタート、\n" +
@@ -51,6 +53,7 @@ window.onload = function() {
         description.x = 60;
         description.y = 240;
         description.width = 520;
+        description.textAlign = "center";
         
         // ===== スタート表示（点滅） =====
         var startLabel = new Label("TAP TO START");
@@ -93,12 +96,36 @@ window.onload = function() {
         var isFinished = false;
 
         // あいつ
-        var aitsu = new Sprite(1366, 1863);
+        // aitsu.image = core.assets[IMG_AITSU];
+        var aitsu;
+
+        if (IMG_AITSU == "koitsu.jpg"){
+            aitsu = new Sprite(1095, 1494);
+            aitsu.scaleX = 0.2 * (1366 / 1095);
+            aitsu.scaleY = 0.2 * (1366 / 1095);
+        }else if (IMG_AITSU == "aitsu.jpg"){
+            aitsu = new Sprite(1095, 1494);
+            aitsu.scaleX = 0.2 * (1366 / 1095);
+            aitsu.scaleY = 0.2 * (1366 / 1095);
+        } else {
+            aitsu = new Sprite(1366, 1863);
+            aitsu.scaleX = 0.2;
+            aitsu.scaleY = 0.2;
+        }
+
         aitsu.image = core.assets[IMG_AITSU];
-        aitsu.scaleX = 0.2;
-        aitsu.scaleY = 0.2;
-        aitsu.x = -450;
-        aitsu.y = -600;  
+
+        if (IMG_AITSU == "koitsu.jpg"){
+            aitsu.x = -250;
+            aitsu.y = -300;
+        } else if (IMG_AITSU == "aitsu.jpg"){
+            aitsu.x = -250;
+            aitsu.y = -300;
+        } else {
+            aitsu.x = -450;
+            aitsu.y = -600;
+        }
+
 
         // タバコ
         var burnSpeed = 0.002;
@@ -111,18 +138,33 @@ window.onload = function() {
         // 左固定（口元固定）
         tabako.originX = 0;
 
-        // tabako.x = aitsu.x;
-        // tabako.y = aitsu.y;
-        tabako.x = aitsu.x + 700;
-        tabako.y = aitsu.y + 930;
+        if (IMG_AITSU == "koitsu.jpg"){
+            tabako.x = aitsu.x + 580;
+            tabako.y = aitsu.y + 680;
+        } else if (IMG_AITSU == "aitsu.jpg"){
+            tabako.x = aitsu.x + 580;
+            tabako.y = aitsu.y + 700;
+        } else {
+            tabako.x = aitsu.x + 700;
+            tabako.y = aitsu.y + 930;
+        };
 
         var mochite = new Sprite(112,67);
         mochite.image = core.assets[IMG_MOCHITE];
         mochite.scaleX = 0.6;
         mochite.scaleY = 0.23;
         mochite.originX = 0;
-        mochite.x = aitsu.x + 700;
-        mochite.y = aitsu.y + 930;
+        if (IMG_AITSU == "koitsu.jpg"){
+            mochite.x = aitsu.x + 580;
+            mochite.y = aitsu.y + 680;
+        } else if (IMG_AITSU == "aitsu.jpg"){
+            mochite.x = aitsu.x + 580;
+            mochite.y = aitsu.y + 700;
+        } else {
+            mochite.x = aitsu.x + 700;
+            mochite.y = aitsu.y + 930;
+        };
+
 
         // スコア表示
         var scoreLabel = new Label("");
@@ -197,46 +239,62 @@ window.onload = function() {
         resultLabel.x = 180;
         resultLabel.y = 300;
 
-        var retryLabel = new Label("Tap or press SPACE to Retry");
+        var retryLabel = new Label();
         retryLabel.font = "24px sans-serif";
         retryLabel.color = "black";
         retryLabel.x = 160;
         retryLabel.y = 360;
+        retryLabel2textAlign = "center";
+        // retryLabel2.width = 360;
 
         scoreScene.addChild(resultLabel);
         scoreScene.addChild(retryLabel);
 
-        scoreScene.on("enterframe", function() {
-            if (core.input.space) {
-                tabako.scaleX = 0.2;
-                isFinished = false;
-                core.replaceScene(playScene);
-            }
-        });
-        scoreScene.addEventListener("touchstart", function() {
-            if (!isFinished) {
-                core.replaceScene(playScene);
-            }
-        });
+        // scoreScene.on("enterframe", function() {
+        //     if (core.input.space) {
+        //         tabako.scaleX = 0.2;
+        //         isFinished = false;
+        //         core.replaceScene(titleScene);
+        //     }
+        // });
+        // scoreScene.addEventListener("touchstart", function() {
+        //     if (!isFinished) {
+        //         core.replaceScene(titleScene);
+        //     }
+        // });
 
         //////////////////////////////////////////////////
         // ゲームオーバー
         //////////////////////////////////////////////////
 
         var gameoverScene = new Scene();
-        gameoverScene.backgroundColor = "#ffcccc";
+        gameoverScene.backgroundColor = "#25819A";
 
-        var gameoverLabel = new Label("GAME OVER");
+        var burnSpeed = 0.002;
+
+        var gameover_IMG = new Sprite(1280,1280);
+        gameover_IMG.image = core.assets["bluegameover.jpg"];
+        gameover_IMG.scaleX = DISP_SIZE/(1280);
+        gameover_IMG.scaleY = DISP_SIZE/(1280);
+        gameover_IMG.x = - DISP_SIZE/2
+        gameover_IMG.y = - DISP_SIZE/2 + 200
+        gameoverScene.addChild(gameover_IMG);
+
+        var gameoverLabel = new Label();
         gameoverLabel.font = "48px sans-serif";
-        gameoverLabel.color = "black";
+        gameoverLabel.color = "white";
         gameoverLabel.x = 170;
         gameoverLabel.y = 280;
+        gameoverLabeltextAlign = "center";
+    
 
-        var retryLabel2 = new Label("Tap or press SPACE to Retry");
+        var retryLabel2 = new Label();
         retryLabel2.font = "24px sans-serif";
-        retryLabel2.color = "black";
+        retryLabel2.color = "white";
         retryLabel2.x = 160;
         retryLabel2.y = 360;
+        retryLabel2textAlign = "center";
+        retryLabel2.width = 360;
 
         gameoverScene.addChild(gameoverLabel);
         gameoverScene.addChild(retryLabel2);
@@ -245,12 +303,12 @@ window.onload = function() {
             if (core.input.space) {
                 tabako.scaleX = 0.2;
                 isFinished = false;
-                core.replaceScene(playScene);
+                core.replaceScene(titleScene);
             }
         });
         gameoverScene.addEventListener("touchstart", function() {
             if (!isFinished) { 
-                core.replaceScene(playScene);
+                core.replaceScene(titleScene);
             }
         });
 
