@@ -12,7 +12,7 @@ window.onload = function() {
     var core = new Core(DISP_SIZE, DISP_SIZE*1.7);
     core.fps = 30;
 
-    core.preload(IMG_AITSU, IMG_TABAKO, IMG_MOCHITE,"bluegameover.jpg","pinkgameover.jpg");
+    core.preload(IMG_AITSU, IMG_TABAKO, IMG_MOCHITE,"yellowgameover.jpg");
     core.keybind(32, "space")
     core.onload = function() {
 
@@ -268,12 +268,12 @@ window.onload = function() {
         //////////////////////////////////////////////////
 
         var gameoverScene = new Scene();
-        gameoverScene.backgroundColor = "#25819A";
+        gameoverScene.backgroundColor = "#FDDD56";
 
         var burnSpeed = 0.002;
 
         var gameover_IMG = new Sprite(1280,1280);
-        gameover_IMG.image = core.assets["bluegameover.jpg"];
+        gameover_IMG.image = core.assets["yellowgameover.jpg"];
         gameover_IMG.scaleX = DISP_SIZE/(1280);
         gameover_IMG.scaleY = DISP_SIZE/(1280);
         gameover_IMG.x = - DISP_SIZE/2
@@ -319,3 +319,4 @@ window.onload = function() {
 
     core.start();
 };
+
